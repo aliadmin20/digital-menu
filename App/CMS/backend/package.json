@@ -26,10 +26,10 @@
     "react-router-dom": "^6.0.0",
     "styled-components": "^6.0.0"
   },
-  "engines": {
-    "node": ">=20.0.0 <=24.x.x",
-    "npm": ">=6.0.0"
-  },
+"engines": {
+  "node": "24.x",
+  "npm": ">=6.0.0"
+},
   "strapi": {
     "uuid": "69da8c99-8bef-465c-b12f-fc7ef18045b3",
     "installId": "fcd48bde9d142d3182fb4d30ee8a0bb4b3b88f7277c9cf3d399c25bd1075a5f9"
