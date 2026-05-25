@@ -1,5 +1,7 @@
 // postgresql://postgres.jfxrshpunxzldmqcbcgg:TtSMi1MzVbzeKutb@aws-0-eu-west-1.pooler.supabase.com:5432/postgres
 
+
+
 import { getRequestConfig } from "next-intl/server";
 import { notFound } from "next/navigation";
 
