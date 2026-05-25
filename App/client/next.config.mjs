@@ -22,23 +22,9 @@ const nextConfig = {
         hostname: "*.eu.r2.cloudflarestorage.com",
         pathname: "/**",
       },
-      // Allow images served directly from Railway/Strapi
-      {
-        protocol: "https",
-        hostname: "digital-menu-production-b812.up.railway.app",
-        pathname: "/**",
-      },
     ],
   },
-  experimental: {
-    // Extracts and inlines critical CSS to eliminate render-blocking
-    // stylesheet requests — saves ~120ms on first paint.
-    optimizeCss: true,
-  },
-  // Doubles the build timeout — prevents 400 errors when Netlify's
-  // build servers are slow to get a response from Railway.
-  staticPageGenerationTimeout: 120,
 };
 
-// 2. Wrap and export the config
+// 2. WRAP and EXPORT the config (This is the missing step)
 export default withNextIntl(nextConfig);
