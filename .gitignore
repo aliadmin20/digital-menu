@@ -23,7 +23,3 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
-
-
-
-postgresql://postgres.zbriwhvcsiqpaunkdepj:ebIGp5LoVR4Zey5b@aws-0-eu-west-1.pooler.supabase.com:5432/postgres
