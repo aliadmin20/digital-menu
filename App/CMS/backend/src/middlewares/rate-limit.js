@@ -2,13 +2,9 @@
 
 const RateLimit = require("koa2-ratelimit").RateLimit;
 
-// Allows 50 requests per IP within a 5-minute window.
-// Responds with HTTP 429 when the limit is exceeded.
-// The store is in-memory by default — sufficient for a single Railway instance.
-// If you ever scale to multiple instances, swap the store for a Redis adapter.
 const limiter = RateLimit.middleware({
-  interval: { min: 5 },   // 5-minute window
-  max: 50,                 // max requests per window per IP
+  interval: { min: 5 },
+  max: 50,
   message: JSON.stringify({
     data: null,
     error: {
@@ -26,9 +22,14 @@ const limiter = RateLimit.middleware({
 
 module.exports = (config, { strapi }) => {
   return async (ctx, next) => {
-    // Skip rate limiting for the Strapi admin panel —
-    // admins shouldn't be locked out by their own tool.
-    if (ctx.path.startsWith("/admin")) {
+    // Skip rate limiting for all Strapi internal routes —
+    // only apply to public API endpoints
+    if (
+      ctx.path.startsWith("/admin") ||
+      ctx.path.startsWith("/upload") ||
+      ctx.path.startsWith("/content-manager") ||
+      ctx.path.startsWith("/content-type-builder")
+    ) {
       return next();
     }
     return limiter(ctx, next);
