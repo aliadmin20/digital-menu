@@ -1,6 +1,19 @@
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || "http://localhost:1337";
 
 /**
+ * Resolves a Strapi image object (v4 or v5 shape) to an absolute URL.
+ */
+function resolveImageUrl(imageField) {
+  const imageData = imageField?.data ?? imageField;
+  const imageAttrs = imageData?.attributes ?? imageData;
+  return imageAttrs?.url
+    ? imageAttrs.url.startsWith("http")
+      ? imageAttrs.url
+      : `${STRAPI_URL}${imageAttrs.url}`
+    : null;
+}
+
+/**
  * Fetches data from Strapi REST API.
  *
  * Uses Next.js cache tagging instead of time-based revalidation.
@@ -71,13 +84,7 @@ export async function getCategories(locale) {
   return (data.data || []).map((item) => {
     const attrs = item.attributes ?? item;
 
-    const imageData = attrs.image?.data ?? attrs.image;
-    const imageAttrs = imageData?.attributes ?? imageData;
-    const imageUrl = imageAttrs?.url
-      ? imageAttrs.url.startsWith("http")
-        ? imageAttrs.url
-        : `${STRAPI_URL}${imageAttrs.url}`
-      : null;
+    const imageUrl = resolveImageUrl(attrs.image);
 
     const sectionData = attrs.section?.data ?? attrs.section;
     const sectionAttrs = sectionData?.attributes ?? sectionData;
@@ -114,16 +121,8 @@ export async function getMenuItems(locale) {
 /**
  * Fetches a single menu item by documentId for a given locale.
  */
-export async function getMenuItem(id, locale) {
-  const data = await fetchStrapi(`/menu-items/${id}`, {
-    locale,
-    "populate[0]": "image",
-    "populate[1]": "category",
-  });
 
-  if (!data.data) return null;
-  return normalizeMenuItem(data.data);
-}
+
 
 /**
  * Normalizes a Strapi item response (handles both v4 and v5 shapes).
@@ -133,11 +132,7 @@ function normalizeMenuItem(item) {
 
   const imageData = attrs.image?.data ?? attrs.image;
   const imageAttrs = imageData?.attributes ?? imageData;
-  const imageUrl = imageAttrs?.url
-    ? imageAttrs.url.startsWith("http")
-      ? imageAttrs.url
-      : `${STRAPI_URL}${imageAttrs.url}`
-    : null;
+  const imageUrl = resolveImageUrl(attrs.image);
 
   const categoryData = attrs.category?.data ?? attrs.category;
   const categoryAttrs = categoryData?.attributes ?? categoryData;
